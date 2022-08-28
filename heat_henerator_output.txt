@@ -1,0 +1,24 @@
+Namespace(api_key='eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiIwOTE0MGFjYy02NzMwLTRkODQtYTU4My1lNjk0YWEzODM3MGIifQ==', batch_size=1, beta_1=0.9, beta_2=0.98, epochs=50, is_distributed=False, log_images=False, lr=0.001, model_path='checkpoints/lstm_ac_reg_noda.ckpt', n_gpus=1, n_hidden_dim=32, neptune_logger=True, num_nodes=1, out_model_path='checkpoints/lstm_ac_reg_noda.ckpt', retrain=False, root='./dataset', run_type='test', source_only=True, src_input_file='source_input.pt', src_target_file='source_target.pt', tar_input_file='target_input_cv1_test.pt', tar_target_file='target_target_cv1_test.pt', time_steps=7)
+Model Created!
+lstm_ac_reg_noda predictions: tensor([120.0000, 150.0000, 180.0000, 210.7493, 246.4544, 277.5891, 302.7383],
+       device='cuda:0')
+lstm_ac_reg_noda target: tensor([120., 150., 180., 220., 260., 280., 300.], device='cuda:0')
+lstm_ac_reg_noda error: tensor(16.8039, device='cuda:0')
+Namespace(api_key='eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiIwOTE0MGFjYy02NzMwLTRkODQtYTU4My1lNjk0YWEzODM3MGIifQ==', batch_size=1, beta_1=0.9, beta_2=0.98, epochs=50, is_distributed=False, log_images=False, lr=0.001, model_path='checkpoints/lstm_ac_reg_noda.ckpt', n_gpus=1, n_hidden_dim=32, neptune_logger=True, num_nodes=1, out_model_path='checkpoints/lstm_ac_reg_noda.ckpt', retrain=False, root='./dataset', run_type='test', source_only=True, src_input_file='source_input.pt', src_target_file='source_target.pt', tar_input_file='target_input_cv1_test.pt', tar_target_file='target_target_cv1_test.pt', time_steps=7)
+Model Created!
+lstm_ac_reg_noda predictions: tensor([120.0000, 150.0000, 180.0000, 210.7493, 246.4544, 277.5891, 302.7383],
+       device='cuda:0')
+lstm_ac_reg_noda target: tensor([120., 150., 180., 220., 260., 280., 300.], device='cuda:0')
+lstm_ac_reg_noda error: tensor(16.8039, device='cuda:0')
+Namespace(api_key='eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiIwOTE0MGFjYy02NzMwLTRkODQtYTU4My1lNjk0YWEzODM3MGIifQ==', batch_size=1, beta_1=0.9, beta_2=0.98, epochs=50, is_distributed=False, log_images=False, lr=0.001, model_path='checkpoints/lstm_ac_reg_mmd_cv1.ckpt', n_gpus=1, n_hidden_dim=32, neptune_logger=True, num_nodes=1, out_model_path='checkpoints/lstm_ac_reg_mmd_cv1.ckpt', retrain=False, root='./dataset', run_type='test', source_only=False, src_input_file='source_input.pt', src_target_file='source_target.pt', tar_input_file='target_input_cv1_test.pt', tar_target_file='target_target_cv1_test.pt', time_steps=7)
+Model Created!
+lstm_ac_reg_mmd_cv1 predictions: tensor([106.9290, 134.1939, 163.9349, 193.7981, 233.6757, 273.2898, 287.8703],
+       device='cuda:0')
+lstm_ac_reg_mmd_cv1 target: tensor([120., 150., 180., 220., 260., 280., 300.], device='cuda:0')
+lstm_ac_reg_mmd_cv1 error: tensor(47.4388, device='cuda:0')
+Namespace(api_key='eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiIwOTE0MGFjYy02NzMwLTRkODQtYTU4My1lNjk0YWEzODM3MGIifQ==', batch_size=1, beta_1=0.9, beta_2=0.98, epochs=50, is_distributed=False, log_images=False, lr=0.001, model_path='checkpoints/lstm_ac_reg_mmd_cv1.ckpt', n_gpus=1, n_hidden_dim=32, neptune_logger=True, num_nodes=1, out_model_path='checkpoints/lstm_ac_reg_mmd_cv1.ckpt', retrain=False, root='./dataset', run_type='test', source_only=False, src_input_file='source_input.pt', src_target_file='source_target.pt', tar_input_file='target_input_cv1_test.pt', tar_target_file='target_target_cv1_test.pt', time_steps=7)
+Model Created!
+lstm_ac_reg_mmd_cv1 predictions: tensor([106.9290, 134.1939, 163.9349, 193.7981, 233.6757, 273.2898, 287.8703],
+       device='cuda:0')
+lstm_ac_reg_mmd_cv1 target: tensor([120., 150., 180., 220., 260., 280., 300.], device='cuda:0')
+lstm_ac_reg_mmd_cv1 error: tensor(47.4388, device='cuda:0')
