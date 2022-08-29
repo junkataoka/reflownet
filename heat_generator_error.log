@@ -1,0 +1,35 @@
+NeptuneLogger will work in online mode
+NeptuneLogger will work in online mode
+Multi-processing is handled by Slurm.
+GPU available: True, used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+initializing ddp: GLOBAL_RANK: 1, MEMBER: 2/2
+/data/home/jkataok1/.conda/envs/cyclegan/lib/python3.8/site-packages/pytorch_lightning/trainer/configuration_validator.py:99: UserWarning: you passed in a val_dataloader but have no validation_step. Skipping val loop
+  rank_zero_warn(f"you passed in a {loader_name} but have no {step_name}. Skipping {stage} loop")
+initializing ddp: GLOBAL_RANK: 0, MEMBER: 1/2
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All DDP processes registered. Starting ddp with 2 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1]
+Set SLURM handle signals.
+Set SLURM handle signals.
+
+  | Name          | Type                   | Params
+---------------------------------------------------------
+0 | model1        | EncoderDecoderConvLSTM | 81.7 M
+1 | model2        | EncoderDecoderConvLSTM | 81.7 M
+2 | criterion     | MSELoss                | 0     
+3 | dcl_criterion | NLLLoss                | 0     
+---------------------------------------------------------
+163 M     Trainable params
+0         Non-trainable params
+163 M     Total params
+653.827   Total estimated model params size (MB)
+[W reducer.cpp:1158] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+[W reducer.cpp:1158] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+/data/home/jkataok1/.conda/envs/cyclegan/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:105: UserWarning: The dataloader, train dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 28 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(

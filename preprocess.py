@@ -35,6 +35,7 @@ def generate_target(root_recipe, num_area, num_geom, num_recipe):
 
     return out
 
+
 def generate_input(root_geom, root_heatmap, seq_len, num_geom, num_recipe):
 
     out = np.empty((num_recipe, num_geom, seq_len, 4, 50, 50))
@@ -59,6 +60,33 @@ def generate_input(root_geom, root_heatmap, seq_len, num_geom, num_recipe):
                                 trace_img[np.newaxis, ...], heatmap_img[np.newaxis, ...]], axis=0)
                 out[i, j,  k, :, :, :] = arr
     out = out.reshape(num_recipe*num_geom, seq_len, 4, 50, 50)
+
+    return out
+
+def generate_tardomain_input(root_geom, root_heatmap, seq_len, geom_id, num_recipe):
+
+    out = np.empty((num_recipe, 1, seq_len, 4, 50, 50))
+
+    for i in range(num_recipe):
+        for k in range(seq_len):
+
+            die_path = f"M{geom_id}_DIE.csv"
+            pcb_path = f"M{geom_id}_PCB.csv"
+            trace_path = f"M{geom_id}_Substrate.csv"
+            heatmap_path = f"IMG_{geom_id}_{i+1}_{k+1}.csv"
+
+            die_img = np.genfromtxt(os.path.join(root_geom, die_path), delimiter=",")
+            pcb_img = np.genfromtxt(os.path.join(root_geom, pcb_path), delimiter=",")
+            trace_img = np.genfromtxt(os.path.join(root_geom, trace_path), delimiter=",")
+            heatmap_img = np.genfromtxt(os.path.join(root_heatmap, heatmap_path), delimiter=",")
+            # Crop heatmap image
+            heatmap_img[12:, 17:] = 0.0
+
+            arr = np.concatenate([die_img[np.newaxis, ...], pcb_img[np.newaxis, ...],
+                            trace_img[np.newaxis, ...], heatmap_img[np.newaxis, ...]], axis=0)
+            out[i, 0,  k, :, :, :] = arr
+
+    out = out.reshape(num_recipe, seq_len, 4, 50, 50)
 
     return out
 
@@ -101,8 +129,8 @@ torch.save(mean, "./dataset/source_mean.pt")
 torch.save(sd, "./dataset/source_sd.pt")
 #%%
 print("Generating target input data")
-a = generate_input(root_geom="./geo_img", root_heatmap="./heatmap_experiment",
-                   seq_len=15, num_geom=1, num_recipe=3)
+a = generate_tardomain_input(root_geom="./geo_img", root_heatmap="./heatmap_experiment",
+                   seq_len=15, geom_id=7, num_recipe=3)
 input_tensor = torch.tensor(a).cuda()
 input_tensor_normalized = (input_tensor - mean + 1e-5) / (sd + 1e-5)
 torch.save(input_tensor_normalized, "./dataset/target_input.pt")
