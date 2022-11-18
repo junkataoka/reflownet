@@ -104,13 +104,13 @@ class EncoderDecoderConvLSTM(nn.Module):
         # outputs_last = outputs_last.permute(0, 2, 1, 3, 4)
         output_last = output_last.view((b, -1))
 
-        ln_1 = self.Linear1(output_last)
-        ln_1_relu = self.relu(ln_1)
-        ln_2 = self.Linear2(ln_1_relu)
-        ln_2_relu = self.relu(ln_2)
-        pred = self.Linear3(ln_2_relu)
+        ln = self.Linear1(output_last)
+        ln_relu = self.relu(ln)
+        ln_last = self.Linear2(ln_relu)
+        ln_last_relu = self.relu(ln_last)
+        pred = self.Linear3(ln_last_relu)
 
-        return pred, output_last, ln_1, ln_2
+        return pred, ln_last, ln
 
     def stack_permute(self, vec):
         vec = torch.stack(vec, 1)

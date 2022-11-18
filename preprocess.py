@@ -20,7 +20,7 @@ np.random.seed(args.seed)
 #%%
 
 #%%
-def generate_target(root_recipe, num_area, num_geom, num_recipe):
+def generate_target(root_recipe, num_area, num_geom, num_recipe, remove_geom):
 
     out = np.empty((num_recipe, num_geom, num_area))
 
@@ -31,12 +31,15 @@ def generate_target(root_recipe, num_area, num_geom, num_recipe):
                 recipe_img = np.genfromtxt(os.path.join(root_recipe, recipe_path), delimiter=",")
                 out[i, j, k] = recipe_img[0, 0]
 
-    out = out.reshape((num_recipe*num_geom, num_area))
+    geom_indices = [i for i in range(num_geom) if i not in remove_geom]
+
+    out = out[:, geom_indices, :]
+    out = out.reshape((num_recipe*(num_geom-len(remove_geom)), num_area))
 
     return out
 
 
-def generate_input(root_geom, root_heatmap, seq_len, num_geom, num_recipe):
+def generate_input(root_geom, root_heatmap, seq_len, num_geom, num_recipe, remove_geom):
 
     out = np.empty((num_recipe, num_geom, seq_len, 4, 50, 50))
 
@@ -59,7 +62,11 @@ def generate_input(root_geom, root_heatmap, seq_len, num_geom, num_recipe):
                 arr = np.concatenate([die_img[np.newaxis, ...], pcb_img[np.newaxis, ...],
                                 trace_img[np.newaxis, ...], heatmap_img[np.newaxis, ...]], axis=0)
                 out[i, j,  k, :, :, :] = arr
-    out = out.reshape(num_recipe*num_geom, seq_len, 4, 50, 50)
+
+    geom_indices = [i for i in range(num_geom) if i not in remove_geom]
+    out = out[:, geom_indices, :]
+
+    out = out.reshape(num_recipe*(num_geom-len(remove_geom)), seq_len, 4, 50, 50)
 
     return out
 
@@ -70,10 +77,10 @@ def generate_tardomain_input(root_geom, root_heatmap, seq_len, geom_id, num_reci
     for i in range(num_recipe):
         for k in range(seq_len):
 
-            die_path = f"M{geom_id}_DIE.csv"
-            pcb_path = f"M{geom_id}_PCB.csv"
-            trace_path = f"M{geom_id}_Substrate.csv"
-            heatmap_path = f"IMG_{geom_id}_{i+1}_{k+1}.csv"
+            die_path = f"M{geom_id+1}_DIE.csv"
+            pcb_path = f"M{geom_id+1}_PCB.csv"
+            trace_path = f"M{geom_id+1}_Substrate.csv"
+            heatmap_path = f"IMG_{geom_id+1}_{i+1}_{k+1}.csv"
 
             die_img = np.genfromtxt(os.path.join(root_geom, die_path), delimiter=",")
             pcb_img = np.genfromtxt(os.path.join(root_geom, pcb_path), delimiter=",")
@@ -92,11 +99,11 @@ def generate_tardomain_input(root_geom, root_heatmap, seq_len, geom_id, num_reci
 
 #%%
 print("Generating target data")
-a = generate_target(root_recipe="recipe_simulation", num_area=7, num_geom=12, num_recipe=81)
+a = generate_target(root_recipe="recipe_simulation", num_area=7, num_geom=12, num_recipe=81, remove_geom=[0])
 target_tensor = torch.tensor(a).cuda()
 torch.save(target_tensor, f"./dataset/source_target.pt")
 
-a = generate_target(root_recipe="recipe_experiment", num_area=7, num_geom=1, num_recipe=3)
+a = generate_target(root_recipe="recipe_experiment", num_area=7, num_geom=12, num_recipe=3, remove_geom=[i for i in range(12) if i != 0])
 target_tensor = torch.tensor(a).cuda()
 torch.save(target_tensor, f"./dataset/target_target.pt")
 
@@ -119,7 +126,7 @@ torch.save(target_target_cv3_test, "./dataset/target_target_cv3_test.pt")
 # %%
 print("Generating input data")
 a = generate_input(root_geom="./geo_img", root_heatmap="./heatmap_simulation",
-                   seq_len=15, num_geom=12, num_recipe=81)
+                   seq_len=15, num_geom=12, num_recipe=81, remove_geom = [0])
 input_tensor = torch.tensor(a).cuda()
 mean = torch.mean(input_tensor, dim=(0, 3, 4), keepdim=True)
 sd = torch.std(input_tensor, dim=(0, 3, 4), keepdim=True)
@@ -130,7 +137,7 @@ torch.save(sd, "./dataset/source_sd.pt")
 #%%
 print("Generating target input data")
 a = generate_tardomain_input(root_geom="./geo_img", root_heatmap="./heatmap_experiment",
-                   seq_len=15, geom_id=7, num_recipe=3)
+                   seq_len=15, geom_id=0, num_recipe=3)
 input_tensor = torch.tensor(a).cuda()
 input_tensor_normalized = (input_tensor - mean + 1e-5) / (sd + 1e-5)
 torch.save(input_tensor_normalized, "./dataset/target_input.pt")

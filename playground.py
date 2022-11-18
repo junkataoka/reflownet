@@ -67,31 +67,6 @@ def generate_heatmap(heatmap_root, die, subtrate, pcb, recipe_num, board_num):
         df = pd.DataFrame(img[:, :, i])
         df.to_csv(f"{heatmap_root}/IMG_{board_num}_{recipe_num}_{i+1}.csv", index=False, header=False)
 
-generate_heatmap("heatmap_experiment", die_M7, subtrate_M7, pcb_M7, 1, 7)
-generate_heatmap("heatmap_experiment", die_M8, subtrate_M8, pcb_M8, 2, 7)
-generate_heatmap("heatmap_experiment", die_M9, subtrate_M9, pcb_M9, 3, 7)
-
-#%% Import packages
-#%% Generate pictures from lab experiment domain
-
-# %%
-df = pd.read_csv(f"heatmap_experiment/IMG_7_2_1.csv", header=None)
-plt.imshow(df)
-#%%
-df = pd.read_csv(f"heatmap_simulation/IMG_7_2_1.csv", header=None)
-plt.imshow(df)
-#%%
-sim = []
-exp = []
-for i in range(1,16):
-    string_exp = f"heatmap_experiment/IMG_7_2_{i}.csv"
-    string_sim = f"heatmap_simulation/IMG_7_2_{i}.csv"
-    temp_exp = pd.read_csv(string_exp, header=None)
-    temp_sim = pd.read_csv(string_sim, header=None)
-    exp.append(temp_exp.iloc[0,0]-272.15)
-    sim.append(temp_sim.iloc[0,0]-272.15)
-#%%
-plt.plot(exp, label="experiment")
-plt.plot(sim)
-plt.legend()
-# %%
+generate_heatmap("heatmap_experiment", die_M7, subtrate_M7, pcb_M7, 1, 1)
+generate_heatmap("heatmap_experiment", die_M8, subtrate_M8, pcb_M8, 2, 1)
+generate_heatmap("heatmap_experiment", die_M9, subtrate_M9, pcb_M9, 3, 1)

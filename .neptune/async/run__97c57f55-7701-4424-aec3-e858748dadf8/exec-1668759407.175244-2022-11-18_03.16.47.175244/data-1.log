@@ -1,0 +1,289 @@
+{"obj": {"type": "AssignString", "path": ["sys", "name"], "value": "Untitled"}, "version": 1}
+{"obj": {"type": "AssignString", "path": ["sys", "description"], "value": ""}, "version": 2}
+{"obj": {"type": "AssignString", "path": ["sys", "hostname"], "value": "SSIE-JHX8MH3-D"}, "version": 3}
+{"obj": {"type": "AssignBool", "path": ["sys", "failed"], "value": false}, "version": 4}
+{"obj": {"type": "ClearStringLog", "path": ["monitoring", "stdout"]}, "version": 5}
+{"obj": {"type": "ClearStringLog", "path": ["monitoring", "stderr"]}, "version": 6}
+{"obj": {"type": "AssignString", "path": ["source_code", "entrypoint"], "value": "main.py"}, "version": 7}
+{"obj": {"type": "UploadFileSet", "path": ["source_code", "files"], "file_globs": ["/home/junkataoka/reflownet/main.py"], "reset": "False"}, "version": 8}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "cpu"], "min": 0.0, "max": 100.0, "unit": "%"}, "version": 9}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "cpu"]}, "version": 10}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "memory"], "min": 0.0, "max": 12.220008850097656, "unit": "GB"}, "version": 11}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "memory"]}, "version": 12}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "gpu"], "min": 0.0, "max": 100.0, "unit": "%"}, "version": 13}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "gpu"]}, "version": 14}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "gpu_memory"], "min": 0.0, "max": 8.0, "unit": "GB"}, "version": 15}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "gpu_memory"]}, "version": 16}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 5.2, "step": null, "ts": 1668759407.5128577}]}, "version": 17}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 3.6142539978027344, "step": null, "ts": 1668759407.5128577}]}, "version": 18}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 3.4110946655273438, "step": null, "ts": 1668759407.5128577}]}, "version": 19}
+{"obj": {"type": "AssignString", "path": ["source_code", "integrations", "pytorch-lightning"], "value": "1.8.2"}, "version": 20}
+{"obj": {"type": "AssignFloat", "path": ["training", "hyperparams", "opt", "lr"], "value": 0.01}, "version": 21}
+{"obj": {"type": "AssignFloat", "path": ["training", "hyperparams", "opt", "beta_1"], "value": 0.9}, "version": 22}
+{"obj": {"type": "AssignFloat", "path": ["training", "hyperparams", "opt", "beta_2"], "value": 0.98}, "version": 23}
+{"obj": {"type": "AssignInt", "path": ["training", "hyperparams", "opt", "batch_size"], "value": 3}, "version": 24}
+{"obj": {"type": "AssignInt", "path": ["training", "hyperparams", "opt", "epochs"], "value": 100}, "version": 25}
+{"obj": {"type": "AssignInt", "path": ["training", "hyperparams", "opt", "n_gpus"], "value": 1}, "version": 26}
+{"obj": {"type": "AssignInt", "path": ["training", "hyperparams", "opt", "num_nodes"], "value": 1}, "version": 27}
+{"obj": {"type": "AssignInt", "path": ["training", "hyperparams", "opt", "n_hidden_dim"], "value": 32}, "version": 28}
+{"obj": {"type": "AssignBool", "path": ["training", "hyperparams", "opt", "log_images"], "value": false}, "version": 29}
+{"obj": {"type": "AssignBool", "path": ["training", "hyperparams", "opt", "is_distributed"], "value": false}, "version": 30}
+{"obj": {"type": "AssignString", "path": ["training", "hyperparams", "opt", "root"], "value": "./dataset"}, "version": 31}
+{"obj": {"type": "AssignString", "path": ["training", "hyperparams", "opt", "src_input_file"], "value": "source_input.pt"}, "version": 32}
+{"obj": {"type": "AssignString", "path": ["training", "hyperparams", "opt", "src_target_file"], "value": "source_target.pt"}, "version": 33}
+{"obj": {"type": "AssignString", "path": ["training", "hyperparams", "opt", "tar_input_file"], "value": "target_input_cv1_train.pt"}, "version": 34}
+{"obj": {"type": "AssignString", "path": ["training", "hyperparams", "opt", "tar_target_file"], "value": "target_target_cv1_train.pt"}, "version": 35}
+{"obj": {"type": "AssignInt", "path": ["training", "hyperparams", "opt", "time_steps"], "value": 7}, "version": 36}
+{"obj": {"type": "AssignString", "path": ["training", "hyperparams", "opt", "model_path"], "value": "checkpoints/lstm_ac_noda.ckpt"}, "version": 37}
+{"obj": {"type": "AssignString", "path": ["training", "hyperparams", "opt", "out_model_path"], "value": "checkpoints/lstm_ac_reg_noda.ckpt"}, "version": 38}
+{"obj": {"type": "AssignBool", "path": ["training", "hyperparams", "opt", "retrain"], "value": false}, "version": 39}
+{"obj": {"type": "AssignBool", "path": ["training", "hyperparams", "opt", "neptune_logger"], "value": true}, "version": 40}
+{"obj": {"type": "AssignString", "path": ["training", "hyperparams", "opt", "api_key"], "value": "eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiIwOTE0MGFjYy02NzMwLTRkODQtYTU4My1lNjk0YWEzODM3MGIifQ=="}, "version": 41}
+{"obj": {"type": "AssignString", "path": ["training", "hyperparams", "opt", "run_type"], "value": "train"}, "version": 42}
+{"obj": {"type": "AssignBool", "path": ["training", "hyperparams", "opt", "source_only"], "value": true}, "version": 43}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 16 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.\n  rank_zero_warn(\n", "step": null, "ts": 1668759408.7416227}]}, "version": 44}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "\rTraining: 0it [00:00, ?it/s]", "step": null, "ts": 1668759408.7569115}]}, "version": 45}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "\rTraining:   0%|                                                                                                                                                                                                                                                                                                                                          | 0/297 [00:00<?, ?it/s]", "step": null, "ts": 1668759408.757331}]}, "version": 46}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "\rEpoch 0:   0%|                                                                                                                                                                                                                                                                                                                                           | 0/297 [00:00<?, ?it/s]", "step": null, "ts": 1668759408.757501}]}, "version": 47}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 3.4, "step": null, "ts": 1668759417.5181994}]}, "version": 48}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 4.969688415527344, "step": null, "ts": 1668759417.5181994}]}, "version": 49}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 4.034141540527344, "step": null, "ts": 1668759417.5181994}]}, "version": 50}
+{"obj": {"type": "AssignString", "path": ["training", "status"], "value": "failed"}, "version": 51}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 0.5, "step": null, "ts": 1668759427.5210023}]}, "version": 52}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 5.005760192871094, "step": null, "ts": 1668759427.5210023}]}, "version": 53}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 4.340782165527344, "step": null, "ts": 1668759427.5210023}]}, "version": 54}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 1.1, "step": null, "ts": 1668759437.5239713}]}, "version": 55}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 5.319416046142578, "step": null, "ts": 1668759437.5239713}]}, "version": 56}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 4.340782165527344, "step": null, "ts": 1668759437.5239713}]}, "version": 57}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 0.3, "step": null, "ts": 1668759447.5270374}]}, "version": 58}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 5.326122283935547, "step": null, "ts": 1668759447.5270374}]}, "version": 59}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 4.340782165527344, "step": null, "ts": 1668759447.5270374}]}, "version": 60}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 0.1, "step": null, "ts": 1668759457.5295765}]}, "version": 61}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 5.347663879394531, "step": null, "ts": 1668759457.5295765}]}, "version": 62}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 4.340782165527344, "step": null, "ts": 1668759457.5295765}]}, "version": 63}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 0.2, "step": null, "ts": 1668759467.5320077}]}, "version": 64}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 5.372993469238281, "step": null, "ts": 1668759467.5320077}]}, "version": 65}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 4.340782165527344, "step": null, "ts": 1668759467.5320077}]}, "version": 66}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 0.2, "step": null, "ts": 1668759477.5346136}]}, "version": 67}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 5.3913116455078125, "step": null, "ts": 1668759477.5346136}]}, "version": 68}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 4.340782165527344, "step": null, "ts": 1668759477.5346136}]}, "version": 69}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 0.2, "step": null, "ts": 1668759487.5381908}]}, "version": 70}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 5.4105987548828125, "step": null, "ts": 1668759487.5381908}]}, "version": 71}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 4.340782165527344, "step": null, "ts": 1668759487.5381908}]}, "version": 72}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 0.3, "step": null, "ts": 1668759497.5407634}]}, "version": 73}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 5.451160430908203, "step": null, "ts": 1668759497.5407634}]}, "version": 74}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 4.340782165527344, "step": null, "ts": 1668759497.5407634}]}, "version": 75}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 0.1, "step": null, "ts": 1668759507.5438683}]}, "version": 76}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 5.4701995849609375, "step": null, "ts": 1668759507.5438683}]}, "version": 77}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 4.340782165527344, "step": null, "ts": 1668759507.5438683}]}, "version": 78}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 0.2, "step": null, "ts": 1668759517.5467658}]}, "version": 79}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 5.544403076171875, "step": null, "ts": 1668759517.5467658}]}, "version": 80}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 4.340782165527344, "step": null, "ts": 1668759517.5467658}]}, "version": 81}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 0.7, "step": null, "ts": 1668759527.646802}]}, "version": 82}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 5.553188323974609, "step": null, "ts": 1668759527.646802}]}, "version": 83}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 4.340782165527344, "step": null, "ts": 1668759527.646802}]}, "version": 84}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 2.9, "step": null, "ts": 1668759537.6497152}]}, "version": 85}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 5.595417022705078, "step": null, "ts": 1668759537.6497152}]}, "version": 86}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 4.340782165527344, "step": null, "ts": 1668759537.6497152}]}, "version": 87}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "traceback"], "values": [{"value": "An uncaught exception occurred while run was active on worker SSIE-JHX8MH3-D.", "step": null, "ts": 1668759546.656641}, {"value": "Marking run as failed", "step": null, "ts": 1668759546.656641}, {"value": "Traceback:", "step": null, "ts": 1668759546.656641}, {"value": "  File \"main.py\", line 403, in <module>\n    run_trainer()\n", "step": null, "ts": 1668759546.656641}, {"value": "  File \"main.py\", line 260, in run_trainer\n    trainer.fit(model, datamodule=oven_data)\n", "step": null, "ts": 1668759546.656641}, {"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py\", line 582, in fit\n    call._call_and_handle_interrupt(\n", "step": null, "ts": 1668759546.656641}, {"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/trainer/call.py\", line 63, in _call_and_handle_interrupt\n    trainer._teardown()\n", "step": null, "ts": 1668759546.656641}, {"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py\", line 1124, in _teardown\n    self.strategy.teardown()\n", "step": null, "ts": 1668759546.656641}, {"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/strategies/strategy.py\", line 496, in teardown\n    self.lightning_module.cpu()\n", "step": null, "ts": 1668759546.656641}, {"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/lightning_lite/utilities/device_dtype_mixin.py\", line 78, in cpu\n    return super().cpu()\n", "step": null, "ts": 1668759546.656641}]}, "version": 88}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "traceback"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/torch/nn/modules/module.py\", line 796, in cpu\n    return self._apply(lambda t: t.cpu())\n", "step": null, "ts": 1668759546.656641}, {"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/torch/nn/modules/module.py\", line 639, in _apply\n    module._apply(fn)\n", "step": null, "ts": 1668759546.656641}, {"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/torch/nn/modules/module.py\", line 639, in _apply\n    module._apply(fn)\n", "step": null, "ts": 1668759546.656641}, {"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/torch/nn/modules/module.py\", line 662, in _apply\n    param_applied = fn(param)\n", "step": null, "ts": 1668759546.656641}, {"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/torch/nn/modules/module.py\", line 796, in <lambda>\n    return self._apply(lambda t: t.cpu())\n", "step": null, "ts": 1668759546.656641}, {"value": "", "step": null, "ts": 1668759546.656641}]}, "version": 89}
+{"obj": {"type": "AssignBool", "path": ["sys", "failed"], "value": true}, "version": 90}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "Traceback (most recent call last):\n", "step": null, "ts": 1668759546.6569138}]}, "version": 91}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/trainer/call.py\", line 38, in _call_and_handle_interrupt\n", "step": null, "ts": 1668759546.6569974}]}, "version": 92}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6571}]}, "version": 93}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "return trainer_fn(*args, **kwargs)", "step": null, "ts": 1668759546.6571448}]}, "version": 94}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6572027}]}, "version": 95}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py\", line 624, in _fit_impl\n", "step": null, "ts": 1668759546.6572716}]}, "version": 96}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.657393}]}, "version": 97}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "self._run(model, ckpt_path=self.ckpt_path)", "step": null, "ts": 1668759546.6574368}]}, "version": 98}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.657496}]}, "version": 99}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py\", line 1061, in _run\n", "step": null, "ts": 1668759546.6575768}]}, "version": 100}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6577191}]}, "version": 101}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "results = self._run_stage()", "step": null, "ts": 1668759546.6577609}]}, "version": 102}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6578271}]}, "version": 103}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py\", line 1140, in _run_stage\n", "step": null, "ts": 1668759546.6578915}]}, "version": 104}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6580284}]}, "version": 105}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "self._run_train()", "step": null, "ts": 1668759546.658069}]}, "version": 106}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6581354}]}, "version": 107}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py\", line 1163, in _run_train\n", "step": null, "ts": 1668759546.6581993}]}, "version": 108}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6583357}]}, "version": 109}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "self.fit_loop.run()", "step": null, "ts": 1668759546.6583767}]}, "version": 110}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6584332}]}, "version": 111}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/loops/loop.py\", line 199, in run\n", "step": null, "ts": 1668759546.6585023}]}, "version": 112}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.658607}]}, "version": 113}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "self.advance(*args, **kwargs)", "step": null, "ts": 1668759546.6586537}]}, "version": 114}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6587124}]}, "version": 115}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/loops/fit_loop.py\", line 267, in advance\n", "step": null, "ts": 1668759546.6587806}]}, "version": 116}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.65889}]}, "version": 117}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "self._outputs = self.epoch_loop.run(self._data_fetcher)", "step": null, "ts": 1668759546.6589394}]}, "version": 118}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6590235}]}, "version": 119}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/loops/loop.py\", line 199, in run\n", "step": null, "ts": 1668759546.659092}]}, "version": 120}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.659181}]}, "version": 121}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "self.advance(*args, **kwargs)", "step": null, "ts": 1668759546.6592362}]}, "version": 122}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6593022}]}, "version": 123}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/loops/epoch/training_epoch_loop.py\", line 214, in advance\n", "step": null, "ts": 1668759546.6593823}]}, "version": 124}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6595287}]}, "version": 125}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "batch_output = self.batch_loop.run(kwargs)", "step": null, "ts": 1668759546.6596065}]}, "version": 126}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6596718}]}, "version": 127}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/loops/loop.py\", line 199, in run\n", "step": null, "ts": 1668759546.6597698}]}, "version": 128}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6598723}]}, "version": 129}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "self.advance(*args, **kwargs)", "step": null, "ts": 1668759546.6599271}]}, "version": 130}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6599844}]}, "version": 131}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py\", line 88, in advance\n", "step": null, "ts": 1668759546.6601062}]}, "version": 132}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6602337}]}, "version": 133}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "outputs = self.optimizer_loop.run(optimizers, kwargs)", "step": null, "ts": 1668759546.660282}]}, "version": 134}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6603427}]}, "version": 135}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/loops/loop.py\", line 199, in run\n", "step": null, "ts": 1668759546.6604202}]}, "version": 136}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6605327}]}, "version": 137}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "self.advance(*args, **kwargs)", "step": null, "ts": 1668759546.6605873}]}, "version": 138}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.660655}]}, "version": 139}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/loops/optimization/optimizer_loop.py\", line 200, in advance\n", "step": null, "ts": 1668759546.660724}]}, "version": 140}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6608386}]}, "version": 141}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "result = self._run_optimization(kwargs, self._optimizers[self.optim_progress.optimizer_position])", "step": null, "ts": 1668759546.6608806}]}, "version": 142}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6609397}]}, "version": 143}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/loops/optimization/optimizer_loop.py\", line 247, in _run_optimization\n", "step": null, "ts": 1668759546.6610057}]}, "version": 144}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6611097}]}, "version": 145}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "self._optimizer_step(optimizer, opt_idx, kwargs.get(\"batch_idx\", 0), closure)", "step": null, "ts": 1668759546.661154}]}, "version": 146}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.661215}]}, "version": 147}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/loops/optimization/optimizer_loop.py\", line 357, in _optimizer_step\n", "step": null, "ts": 1668759546.6612942}]}, "version": 148}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.661406}]}, "version": 149}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "self.trainer._call_lightning_module_hook(", "step": null, "ts": 1668759546.661456}]}, "version": 150}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6615493}]}, "version": 151}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py\", line 1305, in _call_lightning_module_hook\n", "step": null, "ts": 1668759546.6616375}]}, "version": 152}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6618001}]}, "version": 153}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "output = fn(*args, **kwargs)", "step": null, "ts": 1668759546.6618516}]}, "version": 154}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6619084}]}, "version": 155}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/core/module.py\", line 1661, in optimizer_step\n", "step": null, "ts": 1668759546.661978}]}, "version": 156}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6621835}]}, "version": 157}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "optimizer.step(closure=optimizer_closure)", "step": null, "ts": 1668759546.6622267}]}, "version": 158}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6622746}]}, "version": 159}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/core/optimizer.py\", line 169, in step\n", "step": null, "ts": 1668759546.662354}]}, "version": 160}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6624386}]}, "version": 161}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "step_output = self._strategy.optimizer_step(self._optimizer, self._optimizer_idx, closure, **kwargs)", "step": null, "ts": 1668759546.662494}]}, "version": 162}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6625624}]}, "version": 163}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/strategies/strategy.py\", line 234, in optimizer_step\n", "step": null, "ts": 1668759546.6626446}]}, "version": 164}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.662757}]}, "version": 165}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "return self.precision_plugin.optimizer_step(", "step": null, "ts": 1668759546.6628082}]}, "version": 166}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6628778}]}, "version": 167}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/plugins/precision/precision_plugin.py\", line 121, in optimizer_step\n", "step": null, "ts": 1668759546.6629584}]}, "version": 168}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6630425}]}, "version": 169}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "return optimizer.step(closure=closure, **kwargs)", "step": null, "ts": 1668759546.663084}]}, "version": 170}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.663141}]}, "version": 171}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/torch/optim/lr_scheduler.py\", line 68, in wrapper\n", "step": null, "ts": 1668759546.6632075}]}, "version": 172}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6649582}]}, "version": 173}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "return wrapped(*args, **kwargs)", "step": null, "ts": 1668759546.6650248}]}, "version": 174}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.66509}]}, "version": 175}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/torch/optim/optimizer.py\", line 140, in wrapper\n", "step": null, "ts": 1668759546.6651602}]}, "version": 176}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6674867}]}, "version": 177}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "out = func(*args, **kwargs)", "step": null, "ts": 1668759546.6675823}]}, "version": 178}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6676567}]}, "version": 179}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/torch/optim/optimizer.py\", line 23, in _use_grad\n", "step": null, "ts": 1668759546.6677287}]}, "version": 180}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6678169}]}, "version": 181}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "ret = func(self, *args, **kwargs)", "step": null, "ts": 1668759546.6678596}]}, "version": 182}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6679187}]}, "version": 183}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/torch/optim/adam.py\", line 183, in step\n", "step": null, "ts": 1668759546.6679873}]}, "version": 184}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6698716}]}, "version": 185}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "loss = closure()", "step": null, "ts": 1668759546.669945}]}, "version": 186}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6700194}]}, "version": 187}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/plugins/precision/precision_plugin.py\", line 107, in _wrap_closure\n", "step": null, "ts": 1668759546.6701012}]}, "version": 188}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6702044}]}, "version": 189}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "closure_result = closure()", "step": null, "ts": 1668759546.6702492}]}, "version": 190}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.670308}]}, "version": 191}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/loops/optimization/optimizer_loop.py\", line 147, in __call__\n", "step": null, "ts": 1668759546.6703777}]}, "version": 192}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.670463}]}, "version": 193}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "self._result = self.closure(*args, **kwargs)", "step": null, "ts": 1668759546.6705353}]}, "version": 194}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6705976}]}, "version": 195}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/loops/optimization/optimizer_loop.py\", line 133, in closure\n", "step": null, "ts": 1668759546.6706665}]}, "version": 196}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6707504}]}, "version": 197}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "step_output = self._step_fn()", "step": null, "ts": 1668759546.6707928}]}, "version": 198}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.670851}]}, "version": 199}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/loops/optimization/optimizer_loop.py\", line 406, in _training_step\n", "step": null, "ts": 1668759546.67092}]}, "version": 200}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6710477}]}, "version": 201}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "training_step_output = self.trainer._call_strategy_hook(\"training_step\", *kwargs.values())", "step": null, "ts": 1668759546.6710916}]}, "version": 202}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6711504}]}, "version": 203}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py\", line 1443, in _call_strategy_hook\n", "step": null, "ts": 1668759546.6712313}]}, "version": 204}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6714034}]}, "version": 205}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "output = fn(*args, **kwargs)", "step": null, "ts": 1668759546.6714466}]}, "version": 206}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.671517}]}, "version": 207}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/strategies/strategy.py\", line 378, in training_step\n", "step": null, "ts": 1668759546.6715882}]}, "version": 208}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6716876}]}, "version": 209}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "return self.model.training_step(*args, **kwargs)", "step": null, "ts": 1668759546.6717298}]}, "version": 210}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6717892}]}, "version": 211}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"main.py\", line 144, in training_step\n", "step": null, "ts": 1668759546.671858}]}, "version": 212}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6719396}]}, "version": 213}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "src_y_hat, src_output, src_ln_1, src_ln_2 = self.forward(src_x, self.model1)", "step": null, "ts": 1668759546.671983}]}, "version": 214}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.672043}]}, "version": 215}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"main.py\", line 110, in forward\n", "step": null, "ts": 1668759546.672114}]}, "version": 216}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6721911}]}, "version": 217}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "output, f1, f2, f3 = model(x, future_step=self.time_steps)", "step": null, "ts": 1668759546.672234}]}, "version": 218}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6723254}]}, "version": 219}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/torch/nn/modules/module.py\", line 1190, in _call_impl\n", "step": null, "ts": 1668759546.6723971}]}, "version": 220}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.672575}]}, "version": 221}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "return forward_call(*input, **kwargs)", "step": null, "ts": 1668759546.6726265}]}, "version": 222}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6726937}]}, "version": 223}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/reflownet/lstm_ae.py\", line 139, in forward\n", "step": null, "ts": 1668759546.6727924}]}, "version": 224}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6729105}]}, "version": 225}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "outputs, feat1, feat2, feat3 = self.autoencoder(x, seq_len, future_step, h_t, c_t, h_t2, c_t2, h_t3, c_t3, h_t4, c_t4)", "step": null, "ts": 1668759546.6729715}]}, "version": 226}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6730542}]}, "version": 227}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/reflownet/lstm_ae.py\", line 78, in autoencoder\n", "step": null, "ts": 1668759546.673146}]}, "version": 228}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6732457}]}, "version": 229}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "encoder_vector = output_enc_h.reshape(1, 32 * seq_len, 50, 50)", "step": null, "ts": 1668759546.673293}]}, "version": 230}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.673355}]}, "version": 231}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "RuntimeError", "step": null, "ts": 1668759546.67341}]}, "version": 232}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": ": ", "step": null, "ts": 1668759546.6734502}]}, "version": 233}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "shape '[1, 480, 50, 50]' is invalid for input of size 3600000", "step": null, "ts": 1668759546.6735044}]}, "version": 234}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6735697}]}, "version": 235}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\nDuring handling of the above exception, another exception occurred:\n\n", "step": null, "ts": 1668759546.6736388}]}, "version": 236}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "Traceback (most recent call last):\n", "step": null, "ts": 1668759546.6737094}]}, "version": 237}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"main.py\", line 403, in <module>\n", "step": null, "ts": 1668759546.6737804}]}, "version": 238}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6738842}]}, "version": 239}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "run_trainer()", "step": null, "ts": 1668759546.6739278}]}, "version": 240}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.673987}]}, "version": 241}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"main.py\", line 260, in run_trainer\n", "step": null, "ts": 1668759546.674057}]}, "version": 242}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6741452}]}, "version": 243}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "trainer.fit(model, datamodule=oven_data)", "step": null, "ts": 1668759546.6742058}]}, "version": 244}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6742673}]}, "version": 245}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py\", line 582, in fit\n", "step": null, "ts": 1668759546.67434}]}, "version": 246}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6744633}]}, "version": 247}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "call._call_and_handle_interrupt(", "step": null, "ts": 1668759546.674527}]}, "version": 248}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.674589}]}, "version": 249}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/trainer/call.py\", line 63, in _call_and_handle_interrupt\n", "step": null, "ts": 1668759546.674662}]}, "version": 250}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6747446}]}, "version": 251}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "trainer._teardown()", "step": null, "ts": 1668759546.6747873}]}, "version": 252}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6748462}]}, "version": 253}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py\", line 1124, in _teardown\n", "step": null, "ts": 1668759546.6749337}]}, "version": 254}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.675092}]}, "version": 255}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "self.strategy.teardown()", "step": null, "ts": 1668759546.6751363}]}, "version": 256}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6751966}]}, "version": 257}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/pytorch_lightning/strategies/strategy.py\", line 496, in teardown\n", "step": null, "ts": 1668759546.6752665}]}, "version": 258}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6753757}]}, "version": 259}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "self.lightning_module.cpu()", "step": null, "ts": 1668759546.67542}]}, "version": 260}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.67549}]}, "version": 261}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/lightning_lite/utilities/device_dtype_mixin.py\", line 78, in cpu\n", "step": null, "ts": 1668759546.6755638}]}, "version": 262}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6756496}]}, "version": 263}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "return super().cpu()", "step": null, "ts": 1668759546.675695}]}, "version": 264}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6757562}]}, "version": 265}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/torch/nn/modules/module.py\", line 796, in cpu\n", "step": null, "ts": 1668759546.6758327}]}, "version": 266}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6759655}]}, "version": 267}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "return self._apply(lambda t: t.cpu())", "step": null, "ts": 1668759546.6760113}]}, "version": 268}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.676072}]}, "version": 269}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/torch/nn/modules/module.py\", line 639, in _apply\n", "step": null, "ts": 1668759546.676146}]}, "version": 270}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6762757}]}, "version": 271}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "module._apply(fn)", "step": null, "ts": 1668759546.6763241}]}, "version": 272}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6763935}]}, "version": 273}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/torch/nn/modules/module.py\", line 639, in _apply\n", "step": null, "ts": 1668759546.6764884}]}, "version": 274}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.676682}]}, "version": 275}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "module._apply(fn)", "step": null, "ts": 1668759546.6767564}]}, "version": 276}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6768463}]}, "version": 277}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/torch/nn/modules/module.py\", line 662, in _apply\n", "step": null, "ts": 1668759546.6769247}]}, "version": 278}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6770437}]}, "version": 279}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "param_applied = fn(param)", "step": null, "ts": 1668759546.6770878}]}, "version": 280}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.6771488}]}, "version": 281}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"/home/junkataoka/dir_env/reflow/lib/python3.8/site-packages/torch/nn/modules/module.py\", line 796, in <lambda>\n", "step": null, "ts": 1668759546.6772199}]}, "version": 282}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1668759546.6773405}]}, "version": 283}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "return self._apply(lambda t: t.cpu())", "step": null, "ts": 1668759546.6773858}]}, "version": 284}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.677446}]}, "version": 285}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "KeyboardInterrupt", "step": null, "ts": 1668759546.677511}]}, "version": 286}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "", "step": null, "ts": 1668759546.6775737}]}, "version": 287}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1668759546.677635}]}, "version": 288}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "Shutting down background jobs, please wait a moment...\n", "step": null, "ts": 1668759546.6779575}]}, "version": 289}

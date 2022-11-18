@@ -24,6 +24,7 @@ from bayes_opt import UtilityFunction
 from bayes_opt.logger import JSONLogger
 from bayes_opt.event import Events
 import pandas  as pd
+import torch.nn as nn
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--lr', default=1e-2, type=float, help='learning rate')
@@ -54,6 +55,7 @@ parser.add_argument('--api_key', type=str,
 parser.add_argument('--run_type', type=str, default="train")
 parser.add_argument('--source_only', action="store_true", help="Wether training model using source only or not")
 
+
 opt = parser.parse_args()
 print(opt)
 
@@ -73,16 +75,17 @@ class OvenLightningModule(pl.LightningModule):
         self.model1 = EncoderDecoderConvLSTM(nf=self.opt.n_hidden_dim, in_chan=4)
         self.model2 = EncoderDecoderConvLSTM(nf=self.opt.n_hidden_dim, in_chan=4)
         self.log_images = self.opt.log_images
-        self.criterion = torch.nn.MSELoss()
-        self.dcl_criterion = torch.nn.NLLLoss()
+        self.criterion = nn.MSELoss()
+        self.dcl_criterion = nn.NLLLoss()
+        self.pdist = nn.PairwiseDistance(p=2)
         self.batch_size = self.opt.batch_size
         self.time_steps = self.opt.time_steps
         self.epoch = 0
         self.step = 0
         alpha = torch.FloatTensor(6).fill_(1)
-        self.register_parameter(name="alpha", param=torch.nn.Parameter(data=alpha, requires_grad=True))
+        self.register_parameter(name="alpha", param=nn.Parameter(data=alpha, requires_grad=True))
         beta = torch.FloatTensor(6).fill_(0)
-        self.register_parameter(name="beta", param=torch.nn.Parameter(data=beta, requires_grad=True))
+        self.register_parameter(name="beta", param=nn.Parameter(data=beta, requires_grad=True))
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=opt.lr, betas=(opt.beta_1, opt.beta_2))
@@ -144,9 +147,11 @@ class OvenLightningModule(pl.LightningModule):
         src_loss = self.criterion(src_y_hat, torch.log(src_y))
         tar_loss = self.criterion(tar_y_hat, torch.log(tar_y))
 
-        mmd_loss1 = MMD(src_output, tar_output, kernel="multiscale")
-        mmd_loss2 = MMD(src_ln_1, tar_ln_1, kernel="multiscale")
-        mmd_loss3 = MMD(src_ln_2, tar_ln_2, kernel="multiscale")
+        dst_loss1 = torch.mean(self.pdist(src_output, tar_output))
+        dst_loss2 = torch.mean(self.pdist(src_ln_1, tar_ln_1))
+        dst_loss3 = torch.mean(self.pdist(src_ln_2, tar_ln_2))
+
+        # mmd_loss3 = MMD(src_ln_2, tar_ln_2, kernel="multiscale")
 
         reg_loss = self.RegLoss(self.model1, self.model2, self.alpha, self.beta)
 
@@ -155,9 +160,12 @@ class OvenLightningModule(pl.LightningModule):
 
         self.log("src_loss", src_loss.item(), on_step=False, on_epoch=True)
         self.log("tar_loss", tar_loss.item(), on_step=False, on_epoch=True)
-        self.log("mmd_loss1", mmd_loss1.item(), on_step=False, on_epoch=True)
-        self.log("mmd_loss2", mmd_loss2.item(), on_step=False, on_epoch=True)
-        self.log("mmd_loss3", mmd_loss3.item(), on_step=False, on_epoch=True)
+        # self.log("mmd_loss1", mmd_loss1.item(), on_step=False, on_epoch=True)
+        # self.log("mmd_loss2", mmd_loss2.item(), on_step=False, on_epoch=True)
+        # self.log("mmd_loss3", mmd_loss3.item(), on_step=False, on_epoch=True)
+        self.log("dst_loss1", dst_loss1, on_step=False, on_epoch=True)
+        self.log("dst_loss2", dst_loss2, on_step=False, on_epoch=True)
+
         self.log("alpha", self.alpha[0], on_step=False, on_epoch=True)
         self.log("beta", self.beta[0], on_step=False, on_epoch=True)
 
@@ -170,7 +178,7 @@ class OvenLightningModule(pl.LightningModule):
             loss = src_loss
 
         else:
-            loss = src_loss + tar_loss + mmd_loss1 + mmd_loss2 + mmd_loss3 + reg_loss
+            loss = src_loss + dst_loss1 + dst_loss2 + reg_loss
 
         return loss
 
@@ -231,7 +239,7 @@ def run_trainer():
     if opt.neptune_logger:
         logger = NeptuneLogger(
                 api_key=opt.api_key,
-                    project_name='junkataoka/heatmap',
+                    project='junkataoka/heatmap'
                                 )
     else:
         logger = None
@@ -240,7 +248,7 @@ def run_trainer():
     trainer = Trainer(max_epochs=opt.epochs,
                         gpus=opt.n_gpus,
                         logger=logger,
-                        accelerator='ddp',
+                        accelerator='cuda',
                         num_nodes=opt.num_nodes,
                         # gradient_clip_val=0.5,
                         # multiple_trainloader_mode="min_size"
