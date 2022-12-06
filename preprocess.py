@@ -98,8 +98,9 @@ def generate_tardomain_input(root_geom, root_heatmap, seq_len, geom_id, num_reci
     return out
 
 #%%
+remove_geom_list = [0, 1, 2, 3, 4, 5]
 print("Generating target data")
-a = generate_target(root_recipe="recipe_simulation", num_area=7, num_geom=12, num_recipe=81, remove_geom=[0])
+a = generate_target(root_recipe="recipe_simulation", num_area=7, num_geom=12, num_recipe=81, remove_geom=remove_geom_list)
 target_tensor = torch.tensor(a).cuda()
 torch.save(target_tensor, f"./dataset/source_target.pt")
 
@@ -126,7 +127,7 @@ torch.save(target_target_cv3_test, "./dataset/target_target_cv3_test.pt")
 # %%
 print("Generating input data")
 a = generate_input(root_geom="./geo_img", root_heatmap="./heatmap_simulation",
-                   seq_len=15, num_geom=12, num_recipe=81, remove_geom = [0])
+                   seq_len=15, num_geom=12, num_recipe=81, remove_geom = remove_geom_list)
 input_tensor = torch.tensor(a).cuda()
 mean = torch.mean(input_tensor, dim=(0, 3, 4), keepdim=True)
 sd = torch.std(input_tensor, dim=(0, 3, 4), keepdim=True)

@@ -34,7 +34,7 @@ parser.add_argument('--batch_size', default=12, type=int, help='batch size')
 parser.add_argument('--epochs', type=int, default=300, help='number of epochs to train for')
 parser.add_argument('--n_gpus', type=int, default=1, help='number of GPUs')
 parser.add_argument('--num_nodes', type=int, default=1, help='number of nodes')
-parser.add_argument('--n_hidden_dim', type=int, default=32, help='number of hidden dim for ConvLSTM layers')
+parser.add_argument('--n_hidden_dim', type=int, default=8, help='number of hidden dim for ConvLSTM layers')
 parser.add_argument('--log_images', action='store_true', help='Whether to log images')
 parser.add_argument('--is_distributed', action='store_true', help='Whether to used distributeds dataloader')
 
@@ -100,16 +100,16 @@ class OvenLightningModule(pl.LightningModule):
     def load_model(self):
         checkpoint = torch.load(self.opt.model_path)
         self.model1.load_state_dict(checkpoint["model1"])
-        self.model2.load_state_dict(checkpoint["model2"])
+        self.model2.load_state_dict(checkpoint["model1"])
 
         print('Model Created!')
 
 
-    def forward(self, x, model):
+    def forward(self, x, model, source_only):
 
-        output, f1, f2, f3 = model(x, future_step=self.time_steps)
+        output, f1, f2 = model(x, future_step=self.time_steps, source_only=self.opt.source_only)
 
-        return output, f1, f2, f3
+        return output, f1, f2
 
     def RegLoss(self, model1, model2, alpha, beta):
         loss = 0
@@ -126,11 +126,8 @@ class OvenLightningModule(pl.LightningModule):
             if 'decoder_2' in name1:
                 loss += torch.norm(alpha[3] * param1 + beta[3] - param2)
 
-            if 'decoder_CNN' in name1:
+            elif 'decoder_CNN' in name1:
                 loss += torch.norm(alpha[4] * param1 + beta[4] - param2)
-
-            else:
-                loss += torch.norm(alpha[5] * param1 + beta[5] - param2)
 
         return loss
 
@@ -141,13 +138,13 @@ class OvenLightningModule(pl.LightningModule):
         src_x, src_y = src_batch
         tar_x, tar_y = tar_batch
 
-        src_y_hat, src_output, src_ln_1, src_ln_2 = self.forward(src_x, self.model1)
-        tar_y_hat, tar_output, tar_ln_1, tar_ln_2 = self.forward(tar_x, self.model2)
+        src_y_hat, src_ln_1, src_ln_2 = self.forward(src_x, self.model1, self.opt.source_only)
+        tar_y_hat, tar_ln_1, tar_ln_2 = self.forward(tar_x, self.model2, self.opt.source_only)
 
         src_loss = self.criterion(src_y_hat, torch.log(src_y))
         tar_loss = self.criterion(tar_y_hat, torch.log(tar_y))
 
-        dst_loss1 = torch.mean(self.pdist(src_output, tar_output))
+        dst_loss1 = torch.mean(self.pdist(src_y_hat, tar_y_hat))
         dst_loss2 = torch.mean(self.pdist(src_ln_1, tar_ln_1))
         dst_loss3 = torch.mean(self.pdist(src_ln_2, tar_ln_2))
 
@@ -158,29 +155,45 @@ class OvenLightningModule(pl.LightningModule):
         avg_diff_src_src = torch.mean(torch.abs(src_y_hat - torch.log(src_y)))
         avg_diff_tar_tar = torch.mean(torch.abs(tar_y_hat - torch.log(tar_y)))
 
-        self.log("src_loss", src_loss.item(), on_step=False, on_epoch=True)
-        self.log("tar_loss", tar_loss.item(), on_step=False, on_epoch=True)
-        # self.log("mmd_loss1", mmd_loss1.item(), on_step=False, on_epoch=True)
-        # self.log("mmd_loss2", mmd_loss2.item(), on_step=False, on_epoch=True)
-        # self.log("mmd_loss3", mmd_loss3.item(), on_step=False, on_epoch=True)
-        self.log("dst_loss1", dst_loss1, on_step=False, on_epoch=True)
-        self.log("dst_loss2", dst_loss2, on_step=False, on_epoch=True)
+        self.log("src_loss", src_loss.item(), on_step=True, on_epoch=False)
+        self.log("tar_loss", tar_loss.item(), on_step=True, on_epoch=False)
+        # self.log("mmd_loss1", mmd_loss1.item(), on_step=True, on_epoch=True)
+        # self.log("mmd_loss2", mmd_loss2.item(), on_step=True, on_epoch=True)
+        # self.log("mmd_loss3", mmd_loss3.item(), on_step=True, on_epoch=True)
+        self.log("dst_loss1", dst_loss1, on_step=True, on_epoch=False)
+        self.log("dst_loss2", dst_loss2, on_step=True, on_epoch=False)
 
-        self.log("alpha", self.alpha[0], on_step=False, on_epoch=True)
-        self.log("beta", self.beta[0], on_step=False, on_epoch=True)
+        self.log("alpha", self.alpha[0], on_step=True, on_epoch=False)
+        self.log("beta", self.beta[0], on_step=True, on_epoch=False)
 
-        self.log("avg_diff_src_src", avg_diff_src_src.item(), on_step=False, on_epoch=True)
+        self.log("avg_diff_src_src", avg_diff_src_src.item(), on_step=True, on_epoch=False)
 
-        self.log("avg_diff_tar_tar", avg_diff_tar_tar.item(), on_step=False, on_epoch=True)
-
+        self.log("avg_diff_tar_tar", avg_diff_tar_tar.item(), on_step=True, on_epoch=False)
 
         if self.opt.source_only:
             loss = src_loss
+            return loss
 
         else:
-            loss = src_loss + dst_loss1 + dst_loss2 + reg_loss
+            loss = src_loss + dst_loss1 + dst_loss2 + dst_loss3 + reg_loss
+            return {"loss": loss, "src_y_hat": src_y_hat, "tar_y_hat": tar_y_hat, "src_ln_1": src_ln_1, "tar_ln_1": tar_ln_1, "src_ln_2": src_ln_2, "tar_ln_2": tar_ln_2}
 
-        return loss
+    def training_epoch_end(self, training_step_outputs):
+
+        if not self.opt.source_only:
+
+            src_ln_1 = torch.cat([i["src_ln_1"] for i in training_step_outputs], axis=0)
+            src_ln_2 = torch.cat([i["src_ln_2"] for i in training_step_outputs], axis=0)
+            tar_ln_1 = torch.cat([i["tar_ln_1"] for i in training_step_outputs], axis=0)
+            tar_ln_2 = torch.cat([i["tar_ln_2"] for i in training_step_outputs], axis=0)
+            loss = torch.cat([i["loss"].view(1, -1) for i in training_step_outputs], axis=0)
+            torch.save(src_ln_1, f"feature/src_ln_1_epoch{self.epoch}.pt")
+            torch.save(src_ln_2, f"feature/src_ln_2_epoch{self.epoch}.pt")
+            torch.save(tar_ln_1, f"feature/tar_ln_1_epoch{self.epoch}.pt")
+            torch.save(tar_ln_2, f"feature/tar_ln_2_epoch{self.epoch}.pt")
+            torch.save(loss, f"feature/loss_epoch{self.epoch}.pt")
+
+            self.epoch += 1
 
 def test_trainer():
     model =OvenLightningModule(opt).cuda()
@@ -193,10 +206,9 @@ def test_trainer():
         inp, target = batch
         with torch.no_grad():
             if opt.source_only:
-                predictions, _, _, _ = model(inp, model.model1)
+                predictions, _, _ = model(inp, model.model1, opt.source_only)
             else:
-                predictions, _, _, _ = model(inp, model.model2)
-
+                predictions, _, _ = model(inp, model.model2, opt.source_only)
 
         predictions = torch.exp(predictions)
         plt.figure(figsize=(4, 3))

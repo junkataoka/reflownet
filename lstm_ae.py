@@ -52,6 +52,7 @@ class EncoderDecoderConvLSTM(nn.Module):
         self.Linear2 = nn.Linear(2400, 600)
         self.Linear3 = nn.Linear(600, 7)
         self.relu = nn.ReLU(inplace=True)
+        self.nf = nf
 
     def autoencoder(self, x, seq_len, future_step, h_t, c_t, h_t2, c_t2, h_t3, c_t3, h_t4, c_t4):
 
@@ -62,21 +63,22 @@ class EncoderDecoderConvLSTM(nn.Module):
         output_dec_c = []
 
         # encoder
+        b = x.shape[0]
         for t in range(seq_len):
             h_t, c_t = self.encoder_1_convlstm(input_tensor=x[:, t, :, :, :],
                                                cur_state=[h_t, c_t])  # we could concat to provide skip conn here
 
-            h_t2, c_t2 = self.encoder_2_convlstm(input_tensor=h_t,
-                                                 cur_state=[h_t2, c_t2])  # we could concat to provide skip conn here
+            # h_t2, c_t2 = self.encoder_2_convlstm(input_tensor=h_t,
+            #                                      cur_state=[h_t2, c_t2])  # we could concat to provide skip conn here
 
-            output_enc_h += [h_t2]
-            output_enc_c += [c_t2]
+            output_enc_h += [h_t]
+            output_enc_c += [c_t]
 
-        output_enc_h = self.stack_permute(output_enc_h)
-        output_enc_c = self.stack_permute(output_enc_c)
+        # output_enc_h = self.stack_permute(output_enc_h)
+        # output_enc_c = self.stack_permute(output_enc_c)
 
-        encoder_vector = output_enc_h.reshape(1, 32 * seq_len, 50, 50)
-        b = encoder_vector.shape[0]
+        encoder_vector = torch.stack(output_enc_h)
+        encoder_vector = encoder_vector.reshape(b,  self.nf * seq_len, 50, 50)
 
         # decoder
         for t in range(future_step):
@@ -96,13 +98,17 @@ class EncoderDecoderConvLSTM(nn.Module):
             # outputs += [h_t4]  # predictions
 
 
-
         output_dec_h = self.stack_permute(output_dec_h)
         output_dec_c = self.stack_permute(output_dec_c)
 
         output_last = self.decoder_CNN(output_dec_h)
         # outputs_last = outputs_last.permute(0, 2, 1, 3, 4)
         output_last = output_last.view((b, -1))
+
+
+        return output_last
+
+    def bottleneck(self, output_last):
 
         ln = self.Linear1(output_last)
         ln_relu = self.relu(ln)
@@ -117,7 +123,7 @@ class EncoderDecoderConvLSTM(nn.Module):
         vec = vec.permute(0,2,1,3,4)
         return vec
 
-    def forward(self, x, future_step):
+    def forward(self, x, future_step, source_only):
 
         """
         Parameters
@@ -129,16 +135,22 @@ class EncoderDecoderConvLSTM(nn.Module):
         b, seq_len, _, h, w = x.size()
 
         # initialize hidden states
-
         h_t, c_t = self.encoder_1_convlstm.init_hidden(batch_size=b, image_size=(h, w))
         h_t2, c_t2 = self.encoder_2_convlstm.init_hidden(batch_size=b, image_size=(h, w))
         h_t3, c_t3 = self.decoder_1_convlstm.init_hidden(batch_size=b, image_size=(h, w))
         h_t4, c_t4 = self.decoder_2_convlstm.init_hidden(batch_size=b, image_size=(h, w))
 
-        # autoencoder forward
-        outputs, feat1, feat2, feat3 = self.autoencoder(x, seq_len, future_step, h_t, c_t, h_t2, c_t2, h_t3, c_t3, h_t4, c_t4)
+        # if not source_only:
+        #     with torch.no_grad():
+        #         output_last = self.autoencoder(x, seq_len, future_step, h_t, c_t, h_t2, c_t2, h_t3, c_t3, h_t4, c_t4)
+        # else:
+        #     output_last = self.autoencoder(x, seq_len, future_step, h_t, c_t, h_t2, c_t2, h_t3, c_t3, h_t4, c_t4)
 
-        return outputs, feat1, feat2, feat3
+        output_last = self.autoencoder(x, seq_len, future_step, h_t, c_t, h_t2, c_t2, h_t3, c_t3, h_t4, c_t4)
+        # autoencoder forward
+        outputs, feat1, feat2 = self.bottleneck(output_last)
+
+        return outputs, feat1, feat2
 
 class ReverseLayerF(Function):
 

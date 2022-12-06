@@ -50,7 +50,7 @@ class TSDataModule(pl.LightningDataModule):
       # transforms.Pad(2),
       transforms.Resize(50)
       # transforms.RandomCrop(50),
-      # transforms.RandomHorizontalFlip(),
+      # transforms.RandomHorizontalFlip()ssssssss
       # transforms.RandomVerticalFlip()
     ])
 

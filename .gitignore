@@ -7,3 +7,7 @@ Target/*
 pred/*
 Untitled/*
 lightning_logs/*
+feature/*
+Figure/*
+.env
+.neptune
