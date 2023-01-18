@@ -46,6 +46,7 @@ class TSDataModule(pl.LightningDataModule):
   def setup(self, stage=None):
 
 
+
     self.train_transform = transforms.Compose([
       # transforms.Pad(2),
       transforms.Resize(50)

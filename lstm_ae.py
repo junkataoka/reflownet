@@ -28,20 +28,20 @@ class EncoderDecoderConvLSTM(nn.Module):
                                                kernel_size=3,
                                                bias=True)
 
-        self.encoder_2_convlstm = ConvLSTMCell(input_dim=nf,
-                                               hidden_dim=nf,
-                                               kernel_size=3,
-                                               bias=True)
+        # self.encoder_2_convlstm = ConvLSTMCell(input_dim=nf,
+        #                                        hidden_dim=nf,
+        #                                        kernel_size=3,
+        #                                        bias=True)
 
         self.decoder_1_convlstm = ConvLSTMCell(input_dim=nf*15,  # nf + 1
                                                hidden_dim=nf*15,
                                                kernel_size=3,
                                                bias=True)
 
-        self.decoder_2_convlstm = ConvLSTMCell(input_dim=nf*15,
-                                               hidden_dim=nf*15,
-                                               kernel_size=3,
-                                               bias=True)
+        # self.decoder_2_convlstm = ConvLSTMCell(input_dim=nf*15,
+        #                                        hidden_dim=nf*15,
+        #                                        kernel_size=3,
+        #                                        bias=True)
 
         self.decoder_CNN = nn.Conv3d(in_channels=nf*15,
                                      out_channels=1,
@@ -54,7 +54,7 @@ class EncoderDecoderConvLSTM(nn.Module):
         self.relu = nn.ReLU(inplace=True)
         self.nf = nf
 
-    def autoencoder(self, x, seq_len, future_step, h_t, c_t, h_t2, c_t2, h_t3, c_t3, h_t4, c_t4):
+    def autoencoder(self, x, seq_len, future_step, h_t, c_t, h_t3, c_t3):
 
         outputs = []
         output_enc_h = []
@@ -68,14 +68,8 @@ class EncoderDecoderConvLSTM(nn.Module):
             h_t, c_t = self.encoder_1_convlstm(input_tensor=x[:, t, :, :, :],
                                                cur_state=[h_t, c_t])  # we could concat to provide skip conn here
 
-            # h_t2, c_t2 = self.encoder_2_convlstm(input_tensor=h_t,
-            #                                      cur_state=[h_t2, c_t2])  # we could concat to provide skip conn here
 
             output_enc_h += [h_t]
-            output_enc_c += [c_t]
-
-        # output_enc_h = self.stack_permute(output_enc_h)
-        # output_enc_c = self.stack_permute(output_enc_c)
 
         encoder_vector = torch.stack(output_enc_h)
         encoder_vector = encoder_vector.reshape(b,  self.nf * seq_len, 50, 50)
@@ -87,24 +81,13 @@ class EncoderDecoderConvLSTM(nn.Module):
                                                  cur_state=[h_t3, c_t3])  # we could concat to provide skip conn here
 
 
-            # h_t4, c_t4 = self.decoder_2_convlstm(input_tensor=h_t3,
-            #                                      cur_state=[h_t4, c_t4])  # we could concat to provide skip conn here
-
             output_dec_h += [h_t3]
             output_dec_c += [c_t3]
-            # encoder_vector = h_t4
-            # output_enc_c += [c_t]
-
-            # outputs += [h_t4]  # predictions
-
 
         output_dec_h = self.stack_permute(output_dec_h)
-        output_dec_c = self.stack_permute(output_dec_c)
 
         output_last = self.decoder_CNN(output_dec_h)
-        # outputs_last = outputs_last.permute(0, 2, 1, 3, 4)
         output_last = output_last.view((b, -1))
-
 
         return output_last
 
@@ -136,18 +119,13 @@ class EncoderDecoderConvLSTM(nn.Module):
 
         # initialize hidden states
         h_t, c_t = self.encoder_1_convlstm.init_hidden(batch_size=b, image_size=(h, w))
-        h_t2, c_t2 = self.encoder_2_convlstm.init_hidden(batch_size=b, image_size=(h, w))
+        # h_t2, c_t2 = self.encoder_2_convlstm.init_hidden(batch_size=b, image_size=(h, w))
         h_t3, c_t3 = self.decoder_1_convlstm.init_hidden(batch_size=b, image_size=(h, w))
-        h_t4, c_t4 = self.decoder_2_convlstm.init_hidden(batch_size=b, image_size=(h, w))
+        # h_t4, c_t4 = self.decoder_2_convlstm.init_hidden(batch_size=b, image_size=(h, w))
 
-        # if not source_only:
-        #     with torch.no_grad():
-        #         output_last = self.autoencoder(x, seq_len, future_step, h_t, c_t, h_t2, c_t2, h_t3, c_t3, h_t4, c_t4)
-        # else:
-        #     output_last = self.autoencoder(x, seq_len, future_step, h_t, c_t, h_t2, c_t2, h_t3, c_t3, h_t4, c_t4)
 
-        output_last = self.autoencoder(x, seq_len, future_step, h_t, c_t, h_t2, c_t2, h_t3, c_t3, h_t4, c_t4)
-        # autoencoder forward
+        output_last = self.autoencoder(x, seq_len, future_step, h_t, c_t, h_t3, c_t3)
+
         outputs, feat1, feat2 = self.bottleneck(output_last)
 
         return outputs, feat1, feat2

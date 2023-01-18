@@ -82,9 +82,10 @@ class OvenLightningModule(pl.LightningModule):
         self.time_steps = self.opt.time_steps
         self.epoch = 0
         self.step = 0
-        alpha = torch.FloatTensor(6).fill_(1)
+        num_parameters  = len(list(self.model1.named_parameters()))
+        alpha = torch.FloatTensor(num_parameters).fill_(1)
         self.register_parameter(name="alpha", param=nn.Parameter(data=alpha, requires_grad=True))
-        beta = torch.FloatTensor(6).fill_(0)
+        beta = torch.FloatTensor(num_parameters).fill_(0)
         self.register_parameter(name="beta", param=nn.Parameter(data=beta, requires_grad=True))
 
     def configure_optimizers(self):
@@ -113,21 +114,10 @@ class OvenLightningModule(pl.LightningModule):
 
     def RegLoss(self, model1, model2, alpha, beta):
         loss = 0
+        i = 0 
         for (name1, param1), (name2, param2) in zip(model1.named_parameters(), model2.named_parameters()):
-            if 'encoder_1' in name1:
-                loss += torch.norm(alpha[0] * param1 + beta[0] - param2)
-
-            if 'encoder_2' in name1:
-                loss += torch.norm(alpha[1] * param1 + beta[1] - param2)
-
-            if 'decoder_1' in name1:
-                loss += torch.norm(alpha[2] * param1 + beta[2] - param2)
-
-            if 'decoder_2' in name1:
-                loss += torch.norm(alpha[3] * param1 + beta[3] - param2)
-
-            elif 'decoder_CNN' in name1:
-                loss += torch.norm(alpha[4] * param1 + beta[4] - param2)
+                loss += torch.norm(alpha[i] * param1 + beta[i] - param2)
+                i += 1
 
         return loss
 
@@ -155,27 +145,28 @@ class OvenLightningModule(pl.LightningModule):
         avg_diff_src_src = torch.mean(torch.abs(src_y_hat - torch.log(src_y)))
         avg_diff_tar_tar = torch.mean(torch.abs(tar_y_hat - torch.log(tar_y)))
 
-        self.log("src_loss", src_loss.item(), on_step=True, on_epoch=False)
-        self.log("tar_loss", tar_loss.item(), on_step=True, on_epoch=False)
+        self.log("src_loss", src_loss.item(), on_step=False, on_epoch=True)
+        self.log("tar_loss", tar_loss.item(), on_step=False, on_epoch=True)
         # self.log("mmd_loss1", mmd_loss1.item(), on_step=True, on_epoch=True)
         # self.log("mmd_loss2", mmd_loss2.item(), on_step=True, on_epoch=True)
         # self.log("mmd_loss3", mmd_loss3.item(), on_step=True, on_epoch=True)
-        self.log("dst_loss1", dst_loss1, on_step=True, on_epoch=False)
-        self.log("dst_loss2", dst_loss2, on_step=True, on_epoch=False)
+        self.log("dst_loss1", dst_loss1, on_step=False, on_epoch=True)
+        self.log("dst_loss2", dst_loss2, on_step=False, on_epoch=True)
 
-        self.log("alpha", self.alpha[0], on_step=True, on_epoch=False)
-        self.log("beta", self.beta[0], on_step=True, on_epoch=False)
+        self.log("alpha", self.alpha[0], on_step=False, on_epoch=True)
+        self.log("beta", self.beta[0], on_step=False, on_epoch=True)
 
-        self.log("avg_diff_src_src", avg_diff_src_src.item(), on_step=True, on_epoch=False)
+        self.log("avg_diff_src_src", avg_diff_src_src.item(), on_step=False, on_epoch=True)
 
-        self.log("avg_diff_tar_tar", avg_diff_tar_tar.item(), on_step=True, on_epoch=False)
+        self.log("avg_diff_tar_tar", avg_diff_tar_tar.item(), on_step=False, on_epoch=True)
 
         if self.opt.source_only:
             loss = src_loss
             return loss
 
         else:
-            loss = src_loss + dst_loss1 + dst_loss2 + dst_loss3 + reg_loss
+            loss = src_loss + 0.01 * tar_loss + dst_loss1 + dst_loss2 + dst_loss3
+
             return {"loss": loss, "src_y_hat": src_y_hat, "tar_y_hat": tar_y_hat, "src_ln_1": src_ln_1, "tar_ln_1": tar_ln_1, "src_ln_2": src_ln_2, "tar_ln_2": tar_ln_2}
 
     def training_epoch_end(self, training_step_outputs):
