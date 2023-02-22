@@ -12,6 +12,7 @@ from pytorch_lightning import Trainer
 from multiprocessing import Process
 from data_module import TSDataModule
 from lstm_ae import EncoderDecoderConvLSTM
+from lstm_ae_single import EncoderDecoderConvLSTMSingleStream
 from pytorch_lightning.loggers import NeptuneLogger
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 import argparse
@@ -54,6 +55,7 @@ parser.add_argument('--api_key', type=str,
 
 parser.add_argument('--run_type', type=str, default="train")
 parser.add_argument('--source_only', action="store_true", help="Wether training model using source only or not")
+parser.add_argument('--single_f', action="store_true", help="Wether model uses signle feature extractor")
 
 
 opt = parser.parse_args()
@@ -72,8 +74,13 @@ class OvenLightningModule(pl.LightningModule):
         self.save_hyperparameters()
         self.opt = opt
         self.normalize = False
-        self.model1 = EncoderDecoderConvLSTM(nf=self.opt.n_hidden_dim, in_chan=4)
-        self.model2 = EncoderDecoderConvLSTM(nf=self.opt.n_hidden_dim, in_chan=4)
+
+        if self.opt.single_f:
+            self.model = EncoderDecoderConvLSTMSingleStream(nf=self.opt.n_hidden_dim, in_chan=4)
+        else:
+            self.model_src = EncoderDecoderConvLSTM(nf=self.opt.n_hidden_dim, in_chan=4)
+            self.model_tar = EncoderDecoderConvLSTM(nf=self.opt.n_hidden_dim, in_chan=4)
+
         self.log_images = self.opt.log_images
         self.criterion = nn.MSELoss()
         self.dcl_criterion = nn.NLLLoss()
@@ -82,11 +89,11 @@ class OvenLightningModule(pl.LightningModule):
         self.time_steps = self.opt.time_steps
         self.epoch = 0
         self.step = 0
-        num_parameters  = len(list(self.model1.named_parameters()))
-        alpha = torch.FloatTensor(num_parameters).fill_(1)
-        self.register_parameter(name="alpha", param=nn.Parameter(data=alpha, requires_grad=True))
-        beta = torch.FloatTensor(num_parameters).fill_(0)
-        self.register_parameter(name="beta", param=nn.Parameter(data=beta, requires_grad=True))
+        # num_parameters  = len(list(self.model1.named_parameters()))
+        # alpha = torch.FloatTensor(num_parameters).fill_(1)
+        # self.register_parameter(name="alpha", param=nn.Parameter(data=alpha, requires_grad=True))
+        # beta = torch.FloatTensor(num_parameters).fill_(0)
+        # self.register_parameter(name="beta", param=nn.Parameter(data=beta, requires_grad=True))
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=opt.lr, betas=(opt.beta_1, opt.beta_2))
@@ -100,26 +107,29 @@ class OvenLightningModule(pl.LightningModule):
 
     def load_model(self):
         checkpoint = torch.load(self.opt.model_path)
-        self.model1.load_state_dict(checkpoint["model1"])
-        self.model2.load_state_dict(checkpoint["model1"])
+        if self.opt.singe_f:
+            self.model.load_state_dict(checkpoint["model"])
+        else:
+            self.model1.load_state_dict(checkpoint["model1"])
+            self.model2.load_state_dict(checkpoint["model1"])
 
         print('Model Created!')
 
 
-    def forward(self, x, model, source_only):
+    def forward(self, x, model, source_only, domain):
 
-        output, f1, f2 = model(x, future_step=self.time_steps, source_only=self.opt.source_only)
+        output, f1, f2 = model(x, future_step=self.time_steps, source_only=self.opt.source_only, domain=domain)
 
         return output, f1, f2
 
-    def RegLoss(self, model1, model2, alpha, beta):
-        loss = 0
-        i = 0 
-        for (name1, param1), (name2, param2) in zip(model1.named_parameters(), model2.named_parameters()):
-                loss += torch.norm(alpha[i] * param1 + beta[i] - param2)
-                i += 1
+    # def RegLoss(self, model1, model2, alpha, beta):
+    #     loss = 0
+    #     i = 0 
+    #     for (name1, param1), (name2, param2) in zip(model1.named_parameters(), model2.named_parameters()):
+    #             loss += torch.norm(alpha[i] * param1 + beta[i] - param2)
+    #             i += 1
 
-        return loss
+    #     return loss
 
     def training_step(self, batch, batch_idx):
 
@@ -128,8 +138,12 @@ class OvenLightningModule(pl.LightningModule):
         src_x, src_y = src_batch
         tar_x, tar_y = tar_batch
 
-        src_y_hat, src_ln_1, src_ln_2 = self.forward(src_x, self.model1, self.opt.source_only)
-        tar_y_hat, tar_ln_1, tar_ln_2 = self.forward(tar_x, self.model2, self.opt.source_only)
+        if self.opt.single_f:
+            src_y_hat, src_ln_1, src_ln_2 = self.forward(src_x, self.model, self.opt.source_only, domain="src")
+            tar_y_hat, tar_ln_1, tar_ln_2 = self.forward(tar_x, self.model, self.opt.source_only, domain="tar")
+        else:
+            src_y_hat, src_ln_1, src_ln_2 = self.forward(src_x, self.model_src, self.opt.source_only, domain=None)
+            tar_y_hat, tar_ln_1, tar_ln_2 = self.forward(tar_x, self.model_tar, self.opt.source_only, domain=None)
 
         src_loss = self.criterion(src_y_hat, torch.log(src_y))
         tar_loss = self.criterion(tar_y_hat, torch.log(tar_y))
@@ -140,7 +154,7 @@ class OvenLightningModule(pl.LightningModule):
 
         # mmd_loss3 = MMD(src_ln_2, tar_ln_2, kernel="multiscale")
 
-        reg_loss = self.RegLoss(self.model1, self.model2, self.alpha, self.beta)
+        # reg_loss = self.RegLoss(self.model1, self.model2, self.alpha, self.beta)
 
         avg_diff_src_src = torch.mean(torch.abs(src_y_hat - torch.log(src_y)))
         avg_diff_tar_tar = torch.mean(torch.abs(tar_y_hat - torch.log(tar_y)))
@@ -153,8 +167,8 @@ class OvenLightningModule(pl.LightningModule):
         self.log("dst_loss1", dst_loss1, on_step=False, on_epoch=True)
         self.log("dst_loss2", dst_loss2, on_step=False, on_epoch=True)
 
-        self.log("alpha", self.alpha[0], on_step=False, on_epoch=True)
-        self.log("beta", self.beta[0], on_step=False, on_epoch=True)
+        # self.log("alpha", self.alpha[0], on_step=False, on_epoch=True)
+        # self.log("beta", self.beta[0], on_step=False, on_epoch=True)
 
         self.log("avg_diff_src_src", avg_diff_src_src.item(), on_step=False, on_epoch=True)
 
@@ -173,16 +187,16 @@ class OvenLightningModule(pl.LightningModule):
 
         if not self.opt.source_only:
 
-            src_ln_1 = torch.cat([i["src_ln_1"] for i in training_step_outputs], axis=0)
-            src_ln_2 = torch.cat([i["src_ln_2"] for i in training_step_outputs], axis=0)
-            tar_ln_1 = torch.cat([i["tar_ln_1"] for i in training_step_outputs], axis=0)
-            tar_ln_2 = torch.cat([i["tar_ln_2"] for i in training_step_outputs], axis=0)
-            loss = torch.cat([i["loss"].view(1, -1) for i in training_step_outputs], axis=0)
-            torch.save(src_ln_1, f"feature/src_ln_1_epoch{self.epoch}.pt")
-            torch.save(src_ln_2, f"feature/src_ln_2_epoch{self.epoch}.pt")
-            torch.save(tar_ln_1, f"feature/tar_ln_1_epoch{self.epoch}.pt")
-            torch.save(tar_ln_2, f"feature/tar_ln_2_epoch{self.epoch}.pt")
-            torch.save(loss, f"feature/loss_epoch{self.epoch}.pt")
+            # src_ln_1 = torch.cat([i["src_ln_1"] for i in training_step_outputs], axis=0)
+            # src_ln_2 = torch.cat([i["src_ln_2"] for i in training_step_outputs], axis=0)
+            # tar_ln_1 = torch.cat([i["tar_ln_1"] for i in training_step_outputs], axis=0)
+            # tar_ln_2 = torch.cat([i["tar_ln_2"] for i in training_step_outputs], axis=0)
+            # loss = torch.cat([i["loss"].view(1, -1) for i in training_step_outputs], axis=0)
+            # torch.save(src_ln_1, f"feature/src_ln_1_epoch{self.epoch}.pt")
+            # torch.save(src_ln_2, f"feature/src_ln_2_epoch{self.epoch}.pt")
+            # torch.save(tar_ln_1, f"feature/tar_ln_1_epoch{self.epoch}.pt")
+            # torch.save(tar_ln_2, f"feature/tar_ln_2_epoch{self.epoch}.pt")
+            # torch.save(loss, f"feature/loss_epoch{self.epoch}.pt")
 
             self.epoch += 1
 
@@ -196,10 +210,16 @@ def test_trainer():
     for i, batch in enumerate(target_loader):
         inp, target = batch
         with torch.no_grad():
-            if opt.source_only:
-                predictions, _, _ = model(inp, model.model1, opt.source_only)
+            if opt.single_f:
+                if opt.source_only:
+                    predictions, _, _ = model(inp, model.model, opt.source_only, "src")
+                else:
+                    predictions, _, _ = model(inp, model.model, opt.source_only, "tar")
             else:
-                predictions, _, _ = model(inp, model.model2, opt.source_only)
+                if opt.source_only:
+                    predictions, _, _ = model(inp, model.model1, opt.source_only, None)
+                elif opt.single_f:
+                    predictions, _, _ = model(inp, model.model2, opt.source_only, None)
 
         predictions = torch.exp(predictions)
         plt.figure(figsize=(4, 3))
@@ -216,22 +236,6 @@ def test_trainer():
         print(f"{model_name} predictions:", predictions.view(-1))
         print(f"{model_name} target:", target.view(-1))
         print(f"{model_name} error:", err)
-
-def val_best_recipes():
-    model =OvenLightningModule(opt).cuda()
-
-    model.eval()
-    oven_data = TSDataModule(opt, opt.root, opt.src_input_file, opt.src_target_file, opt.tar_input_file, opt.tar_target_file, batch_size=1)
-    oven_data.setup()
-    source_loader, target_loader = oven_data.val_dataloader()
-    avg_diff = []
-    for idx, batch in enumerate(target_loader):
-        inp, target = batch
-        with torch.no_grad():
-            predictions, _ = model(inp)
-            avg_diff.append(torch.mean(torch.abs(target - predictions)))
-    arr = torch.stack(avg_diff)
-    torch.save(arr, f"temp/{opt.tar_input_file}_err.pt")
 
 def run_trainer():
     model =OvenLightningModule(opt).cuda()
@@ -261,146 +265,17 @@ def run_trainer():
         model.load_model()
 
     trainer.fit(model, datamodule=oven_data)
-    torch.save({"model1":model.model1.state_dict(),
-                "model2":model.model2.state_dict()
-                }, opt.out_model_path)
+    if opt.single_f:
+        torch.save({"model":model.model.state_dict()
+                    }, opt.out_model_path)
 
-
-def create_input(geom_root, heatmap_root, geom_num, seq_len):
-
-    die_path = f"M{geom_num}_DIE.csv"
-    pcb_path = f"M{geom_num}_PCB.csv"
-    trate_path = f"M{geom_num}_Substrate.csv"
-    out = np.empty((1, len(seq_len), 4, 50, 50))
-    die_img = np.genfromtxt(os.path.join(geom_root, die_path), delimiter=",")
-    pcb_img = np.genfromtxt(os.path.join(geom_root, pcb_path), delimiter=",")
-    trace_img = np.genfromtxt(os.path.join(geom_root, trate_path), delimiter=",")
-    for i in range(len(seq_len)):
-        heatmap_img = np.genfromtxt(os.path.join(heatmap_root, trate_path), delimiter=",")
-        heatmap_path = f"IMG_{geom_num}_1_{i+1}.csv"
-        arr = np.concatenate([die_img[np.newaxis, ...], pcb_img[np.newaxis, ...],
-                        trace_img[np.newaxis, ...], heatmap_img[np.newaxis, ...]], axis=0)
-        out[0, i,  :, :, :] = arr
-
-    inp = torch.tensor(out)
-    return inp
-
-
-def bayesian_ops():
-    model =OvenLightningModule(opt).cuda()
-    model.load_model()
-    # model.load_state_dict(torch.load(opt.model_path, map_location='cuda:0'), strict=False)
-    model.eval()
-
-    src_mean = torch.load("dataset/source_mean.pt", map_location="cuda:0")
-    src_sd = torch.load("dataset/source_sd.pt", map_location="cuda:0")
-    plt.figure(figsize=(4, 3))
-    geom_num = 1
-
-    def GetSlope(val1, val2, t1, t2):
-        slope = (val2 - val1) / (t2 - t1)
-        return slope
-
-    def black_box_function(r1, r2, r3, r4, r5, r6, r7):
-
-        steps = [33, 66, 99, 132, 171, 204, 214, 224,
-                    234, 244, 254, 264, 274, 284, 294]
-        recipes = [r1, r2, r3, r4, r5, r6, r7]
-        inp = create_input(geom_num, recipes)
-        inp = inp.cuda()
-        inp_normalized = (inp - src_mean + 1e-5)/(src_sd+1e-5)
-        inp_normalized = inp_normalized.type(torch.cuda.FloatTensor)
-        loss = 0
-
-        target_temp = torch.cuda.FloatTensor( [57, 90, 123, 156, 195, 228, 233, 238, 242, 247, 242, 238, 233, 228, 223]).unsqueeze(1)
-
-        with torch.no_grad():
-            pred, _, _, _, _ = model(inp_normalized, model.model1)
-
-        pred_temp = pred[:,:,:, :12, :17].mean((-1,-2)).squeeze(0)
-        loss += (target_temp - pred_temp).pow(2).sum() / target_temp.size(0)
-        # peak_err = max((max(pred_temp) - max(recipes), 0.0))
-        # loss += float(peak_err)
-
-
-        loss = np.array(loss.cpu())
-
-
-        return -loss
-
-    # pbounds = {"r1": (100, 120), "r2": (120, 170), "r3": (170, 190),
-    #            "r4":(190, 210), "r5":(240, 400), "r6": (270, 400), "r7": (290, 400)}
-
-
-    pbounds = {"r1": (100, 280), "r2": (100, 280), "r3": (100, 280),
-               "r4":(100, 280), "r5":(100, 280), "r6": (100, 280), "r7": (100, 280)}
-
-#recipes = [120, 150, 180, 210, 240, 280, 300]
-
-    optimizer = BayesianOptimization(f=black_box_function,
-                                     pbounds=pbounds,
-                                     random_state=1)
-# logger = JSONLogger(path="./bo_logs.json")
-# optimizer.subscribe(Events.OPTIMIZATION_STEP, logger)
-
-    optimizer.maximize(
-        acq="ei",
-        xi=0.1,
-        init_points=100,
-        n_iter=100
-    )
-    print(optimizer.max)
-    r1, r2, r3, r4, r5, r6, r7 = optimizer.max["params"]["r1"], \
-                                 optimizer.max["params"]["r2"], \
-                                 optimizer.max["params"]["r3"], \
-                                 optimizer.max["params"]["r4"], \
-                                 optimizer.max["params"]["r5"], \
-                                 optimizer.max["params"]["r6"], \
-                                 optimizer.max["params"]["r7"],
-
-    recipes = [r1, r2, r3, r4, r5, r6, r7]
-
-    recipe_list = { "Experiment1":[105, 130, 160, 190, 230, 270, 290],
-               "Experiment2":[110, 140, 170, 200, 240, 280, 290],
-                "Experiment3":[120, 150, 180, 220, 260, 280, 300]}
-
-    recipe_list["BO"] = recipes
-    df = pd.DataFrame()
-    for k, v in recipe_list.items():
-        print(f"", black_box_function(v[0], v[1], v[2], v[3], v[4], v[5], v[6]))
-
-        inp = create_input(geom_num, v)
-        inp = inp.cuda()
-        inp_normalized = (inp - src_mean + 1e-5)/(src_sd+1e-5)
-        inp_normalized = inp_normalized.type(torch.cuda.FloatTensor)
-        steps = [33, 66, 99, 132, 171, 204, 214, 224,
-                    234, 244, 254, 264, 274, 284, 294]
-
-        with torch.no_grad():
-            pred, _, _, _, _ = model(inp_normalized, model.model1)
-
-        y = pred[0, :, :, :5, :5].mean((-1, -2)).cpu()
-        df[k] = pd.Series(y.squeeze(1))
-        plt.plot(steps, y, ".-", label=f"M{geom_num}_{k}")
-
-    target_temp = torch.cuda.FloatTensor( [57, 90, 123, 156, 195, 228, 233, 238, 242, 247, 242, 238, 233, 228, 223]).unsqueeze(1).cpu()
-
-    plt.plot(steps, target_temp, ".-", label="Target")
-
-    df.to_csv("temp/bo_profile.csv")
-    plt.ylabel("Temperature")
-    plt.xlabel("Time Step")
-    plt.legend()
-    plt.savefig(f"Figure/BO_pred.png", dpi=300, bbox_inches='tight')
-    plt.close("all")
-
+    else:
+        torch.save({"model1":model.model1.state_dict(),
+                    "model2":model.model2.state_dict()
+                    }, opt.out_model_path)
 
 if __name__ == '__main__':
     if opt.run_type=="test":
         test_trainer()
-    elif opt.run_type=="validation":
-        val_best_recipes()
-    elif opt.run_type=="bo":
-        bayesian_ops()
     else:
         run_trainer()
